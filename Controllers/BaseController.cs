@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace RegisterLogin.Controllers
 {
-    public class BaseController : Controller
+    // we have BaseController from ControllerBase because in this API we dont need view Support, if Needed View then derieved from Controller
+
+    //we use baseController for common features in our application, which will be use next in anywhere we want just by call it's properties and should be inhertied by child property
+    public class BaseController : ControllerBase
     {
 
-     
+        // we use static Users list to return the list to the user
         public static List<User> user = new List<User>()
         {  
             new User {
