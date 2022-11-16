@@ -11,9 +11,6 @@ namespace RegisterLogin.Controllers
     [Route("[controller]")]
     public class UserController : BaseController
     {
-        //private static Register user = new Register();
-
-    
         [HttpGet("Users")]
         public IActionResult GetUsers()
         {
@@ -37,7 +34,6 @@ namespace RegisterLogin.Controllers
         public IActionResult UpdateUser(User updateUser)
         {
             // list/array is reference type so character will automaticlly update the origanal list
-            var findId = user.Find(x => x.Id == updateUser.Id);
             var userObj = user.FirstOrDefault(u => u.Id == updateUser.Id);
             if (userObj != null && updateUser.Email is null)
             {
@@ -70,7 +66,6 @@ namespace RegisterLogin.Controllers
            
         }
         
-
         [HttpPost]
         public IActionResult AddUser(User addUser)
         {
