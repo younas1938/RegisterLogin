@@ -10,8 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserEntity.Data.Services;
 
-namespace RegisterLogin
+namespace UserEntity
 {
     public class Startup
     {
@@ -26,6 +27,7 @@ namespace RegisterLogin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
