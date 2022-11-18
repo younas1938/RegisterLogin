@@ -1,25 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserEntity.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using UserEntity.Data.Services;
-using Grpc.Core;
 using System.Reflection;
-using Microsoft.Graph;
 using UserEntity.Enum;
 
 namespace UserEntity.Controllers
 {
     // we have BaseController from ControllerBase because in this API we dont need view Support, if Needed View then derieved from Controller
-
     //we use baseController for common features in our application, which will be use next in anywhere we want just by call it's properties and 
     public class BaseController : Controller
     {
-
-
-
         /// <summary>
         /// Overrides Ok Response.
         /// </summary>
@@ -35,7 +26,6 @@ namespace UserEntity.Controllers
                 Payload = value
             });
         }
-
         /// <summary>
         /// Overrides Ok Response.
         /// </summary>
@@ -67,7 +57,6 @@ namespace UserEntity.Controllers
                 Payload = value
             });
         }
-
         /// <summary>
         /// Overrides Bad Request.
         /// </summary>
@@ -94,8 +83,5 @@ namespace UserEntity.Controllers
                 Message = value.ToString(),
             });
         }
-
-
-
     }
 }

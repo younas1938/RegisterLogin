@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UserEntity.Data.Services
+namespace UserEntity.Models
 {
     // T is is Actuall type of data, we want to send back
     public class ServerResponse

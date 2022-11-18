@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserEntity.Models;
 
-namespace UserEntity.Data.Services
+namespace UserEntity.Services.impl
 {
     // Service class for the User Entity which is implemented from the Interface
     public class UsersService : IUsersService
@@ -35,7 +35,7 @@ namespace UserEntity.Data.Services
             }
             else
             {
-                // otherwise throw an exception ERROR
+                // else will throw an exception for our catch block to be run for the error msg
                 throw new Exception();
             }
         }
@@ -44,9 +44,10 @@ namespace UserEntity.Data.Services
         {
             // it will find the specific id and return the complete row/obj or It will be Null
             var isUserExist = user.FirstOrDefault(x => x.Id == id);
-            // if null the if condition wont work
+            // if isUserExist have no obj it will becomes null and if-condition will throw an exception
             if (isUserExist == null)
             {
+                // else will throw an exception for our catch block to be run for the error msg
                 throw new Exception();
             }
             // if not null the else condition will remove the user from the list/db
@@ -59,7 +60,7 @@ namespace UserEntity.Data.Services
         // get list of users
         public List<User> GetAll()
         {
-            // list of users getting
+            // we will get list of users from our inMemory list => Users
             var result = user.ToList();
             return result;
         }
@@ -68,14 +69,15 @@ namespace UserEntity.Data.Services
         {
             // will return the first found obj otherwise null 
             var result = user.FirstOrDefault(x => x.Id == id);
-            // if not null the details of a particular will return
+            // if not null the details of a particular user will return
             if (result != null)
             {
+                // return the specific user detailss in the UserController
                 return result;
             }
             else
             {
-                // throw exception for our services to make a generic response
+                // this exception will run to throw an exception for our Catch block to generate a Badrequest generic Error Msg
                 throw new Exception();
             }
         }
@@ -84,9 +86,10 @@ namespace UserEntity.Data.Services
         {
             // getting the user data for updating if id found and email should be null
             var userObj = user.FirstOrDefault(u => u.Id == newUser.Id && newUser.Email is null);
-            // if userObj is null throw an exception
+            // if userObj is null due to no userName found , will throw an exception inthe IF condition
             if (userObj == null)
             {
+                // this will throw an exception for our Catch block to generate a generic response error msg
                 throw new Exception();
             }
             else
@@ -94,6 +97,7 @@ namespace UserEntity.Data.Services
                 // if userFound for update it will update the user
                 userObj.UserName = newUser.UserName;
                 userObj.Password = newUser.Password;
+                // will return UserObj into the Try Block of the UpdateUser IAction
                 return userObj;
             }
         }

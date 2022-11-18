@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserEntity.Models;
 
-namespace UserEntity.Data.Services
+namespace UserEntity.Services
 {
     //Interface class With 'I' shows It's Interface
     public interface IUsersService
