@@ -399,3 +399,5 @@ FodyWeavers.xsd
 *.dll
 *.dll
 *.dll
+obj/project.assets.json
+obj/project.nuget.cache

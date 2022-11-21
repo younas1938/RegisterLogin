@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserEntity.Context;
 using UserEntity.Dto;
 using UserEntity.Models;
 
@@ -18,10 +20,11 @@ namespace UserEntity.Services.impl
 
         };
         private readonly IMapper _mapper;
-
-        public UsersService(IMapper mapper)
+        private readonly UserDbContext _db;
+        public UsersService(IMapper mapper, UserDbContext db)
         {
             this._mapper = mapper;
+            _db = db;
         }
         // implementation of the AddUsers for Adding user into List/DB
         public async Task<List<UserDto>> AddUsers(UserDto addUser)
@@ -69,7 +72,8 @@ namespace UserEntity.Services.impl
         public async Task<List<UserDto>> GetAll()
         {
             // we will get list of users from our inMemory list => Users
-            var result = (user.Select(x => _mapper.Map<UserDto>(x))).ToList();
+            IEnumerable<User> dbUsers = await _db.Users.ToListAsync();
+            var result = (dbUsers.Select(x => _mapper.Map<UserDto>(x))).ToList();
             return result;
         }
         // get a specific user details by his/her id
