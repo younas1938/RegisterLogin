@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserEntity.Dto;
 using UserEntity.Models;
 
 namespace UserEntity.Services
@@ -13,16 +14,16 @@ namespace UserEntity.Services
 
 
         // getAll Users, method without body
-        List<User> GetAll();
+        Task<List<UserDto>> GetAll();
         // getUser Id=, method without body
-        User GetById(int id);
+        Task<UserDto> GetById(int id);
         // Register/Add user, without body
-        List<User> AddUsers(User user);
+        Task<List<UserDto>> AddUsers(UserDto user);
         // update user method without body
-        User Update(User newUser);
+        Task<UserDto> Update(UserDto newUser);
         // Delete user mehthod without body
-        void Delete(int id);
+        Task<List<UserDto>> Delete(int id);
 
-                                    /* Interface doesnt have a body { }*/
+        /* Interface doesnt have a body { }*/
     }
 }

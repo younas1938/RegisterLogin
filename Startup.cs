@@ -36,12 +36,18 @@ namespace UserEntity
 
             // Singleton sercive will be using when 'we arw working on a single instance through out of the application'
             // example of Singleton: DB, logfile
+            services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<IUsersService, UsersService>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(x => {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "User Entity V1");
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

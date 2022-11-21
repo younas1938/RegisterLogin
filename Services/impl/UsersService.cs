@@ -1,7 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserEntity.Dto;
 using UserEntity.Models;
 
 namespace UserEntity.Services.impl
@@ -15,8 +17,14 @@ namespace UserEntity.Services.impl
          new User {Id=2,FirstName="qwer",LastName="eq",UserName="qwer12",Email="qwer12@gmail.com",Password="qwer1212"}
 
         };
+        private readonly IMapper _mapper;
+
+        public UsersService(IMapper mapper)
+        {
+            this._mapper = mapper;
+        }
         // implementation of the AddUsers for Adding user into List/DB
-        public List<User> AddUsers(User addUser)
+        public async Task<List<UserDto>> AddUsers(UserDto addUser)
         {
             // checking if email is exist, if exist it will becomes true then we will not step into the if condition
             var isEmailExist = user.Any(x => x.Email == addUser.Email);
@@ -26,12 +34,13 @@ namespace UserEntity.Services.impl
             // Through post request it should be null, Email should be  empty or email should be duplicate then this if condition will works
             if (addUser != null && addUser.Email != "" && addUser.Password != "" && !isEmailExist)
             {
-                // userId will be the usersList last index but with one Increment for saving into the next empty list of index
-                addUser.Id = user.Count + 1;
                 // user is added into our Users List
-                user.Add(addUser);
+                var data = _mapper.Map<User>(addUser);
+                data.Id = user.Max(x => x.Id) + 1;
+                user.Add(data);
                 // return the user!
-                return user;
+         
+                return (user.Select(x => _mapper.Map<UserDto>(x))).ToList();
             }
             else
             {
@@ -40,35 +49,34 @@ namespace UserEntity.Services.impl
             }
         }
         // DeleteUser will get the specific id which is provided by the POSTMAN DEL request
-        public void Delete(int id)
+        public async Task<List<UserDto>> Delete(int id)
         {
-            // it will find the specific id and return the complete row/obj or It will be Null
-            var isUserExist = user.FirstOrDefault(x => x.Id == id);
-            // if isUserExist have no obj it will becomes null and if-condition will throw an exception
-            if (isUserExist == null)
+            try
             {
-                // else will throw an exception for our catch block to be run for the error msg
-                throw new Exception();
-            }
-            // if not null the else condition will remove the user from the list/db
-            else
-            {
-                // will remove the user from the list/db
+                User isUserExist = user.First(x => x.Id == id);
                 user.Remove(isUserExist);
+                var data = (user.Select(x => _mapper.Map<UserDto>(x))).ToList();
+                return data;
             }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
         // get list of users
-        public List<User> GetAll()
+        public async Task<List<UserDto>> GetAll()
         {
             // we will get list of users from our inMemory list => Users
-            var result = user.ToList();
+            var result = (user.Select(x => _mapper.Map<UserDto>(x))).ToList();
             return result;
         }
         // get a specific user details by his/her id
-        public User GetById(int id)
+        public async Task<UserDto> GetById(int id)
         {
             // will return the first found obj otherwise null 
-            var result = user.FirstOrDefault(x => x.Id == id);
+            var result = _mapper.Map<UserDto>(user.FirstOrDefault(x => x.Id == id));
             // if not null the details of a particular user will return
             if (result != null)
             {
@@ -82,7 +90,7 @@ namespace UserEntity.Services.impl
             }
         }
         // update the user by sending the PUT from the PSOTMAN
-        public User Update(User newUser)
+        public async Task<UserDto> Update(UserDto newUser)
         {
             // getting the user data for updating if id found and email should be null
             var userObj = user.FirstOrDefault(u => u.Id == newUser.Id && newUser.Email is null);
@@ -98,7 +106,7 @@ namespace UserEntity.Services.impl
                 userObj.UserName = newUser.UserName;
                 userObj.Password = newUser.Password;
                 // will return UserObj into the Try Block of the UpdateUser IAction
-                return userObj;
+                return _mapper.Map<UserDto>(userObj);
             }
         }
     }

@@ -6,7 +6,6 @@ C:\Users\Muhammad Yunas\source\repos\RegisterLogin\bin\Debug\netcoreapp3.1\Regis
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\bin\Debug\netcoreapp3.1\RegisterLogin.runtimeconfig.dev.json
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\bin\Debug\netcoreapp3.1\RegisterLogin.dll
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\bin\Debug\netcoreapp3.1\RegisterLogin.pdb
-C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.csproj.AssemblyReference.cache
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.AssemblyInfoInputs.cache
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.AssemblyInfo.cs
@@ -19,3 +18,4 @@ C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\Regis
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.dll
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.pdb
 C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.genruntimeconfig.cache
+C:\Users\Muhammad Yunas\source\repos\RegisterLogin\obj\Debug\netcoreapp3.1\RegisterLogin.csproj.AssemblyReference.cache

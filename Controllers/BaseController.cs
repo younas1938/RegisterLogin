@@ -18,6 +18,7 @@ namespace UserEntity.Controllers
         /// <returns>An OkObjectResult.</returns>
         public override OkObjectResult Ok(object value)
         {
+            
             // make a serve response object and assign values to our response to show in the JSON form
             return base.Ok(new ServerResponse()
             {

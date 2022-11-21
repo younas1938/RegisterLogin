@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserEntity.Services;
 using UserEntity.Helpers;
+using UserEntity.Dto;
 
 namespace UserEntity.Controllers
 {
@@ -24,31 +25,31 @@ namespace UserEntity.Controllers
         }
         // httpGet will return, in our case we are returning the Users from the  List/db
         [HttpGet("Users")]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
             try
             {
                 var users = _user.GetAll();
                 // it will call the override OK method which is in the BaseController
                 // OK will return the 200 successful http request
-                return Ok(users);
+                return Ok( await users);
             }
             catch (Exception)
             {
                 // this badrequest generatre a Server Error message 'Internal Server Error'
-                return BadRequest(Helpers.HelperMessage.serverError) ;
+                return BadRequest(HelperMessage.serverError) ;
             }
         }
         // HttpGet("{id}") this will route into the specific id request likes Users/2
         [HttpGet("{id}")]
-        public IActionResult UserDetails(int id)
+        public async Task<IActionResult> UserDetails(int id)
         {
             try
             {
                 // will get user obj by it's id with in Try block incase of error
                 var user = _user.GetById(id);
                 // Ok returns to JSON form with some generic response (status:1, message:"")
-                return Ok(user);
+                return Ok(await user);
             }
             catch (Exception)
             {
@@ -56,55 +57,56 @@ namespace UserEntity.Controllers
                 return BadRequest(Helpers.HelperMessage.serverError);
             }
         }
-        // Put is use for the Update in our List/DB using API
-        [HttpPut]
-        public IActionResult UpdateUser(User updateUser)
-        {
-            try
-            {
-                // using try block, to update user by using the update service
-                var data = _user.Update(updateUser);
-                // Ok request will return a nice msg 'User Updated' by using custome serverResponse
-                return Ok(Helpers.HelperMessage.userUpdated);
-            }
-            catch (Exception)
-            {
-                // incase of exception, the badrequest will generate a custome server response error message 'Internal Server Error'
-                return BadRequest(Helpers.HelperMessage.serverError);
-            }
-        }
+        
+
         // using httpDelete request to remove user from list/db by id
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
-                // using try block to check if any error occurs for the remove the user by using delete userservice
-                _user.Delete(id);
-                // if user deleted with showing no error, OK request will generate a msg "User Deleted!"
-                return Ok(Helpers.HelperMessage.userDeleted);
+                var data = await _user.Delete(id);
+                return Ok(  HelperMessage.userDeleted);
+
             }
             catch (Exception)
             {
-                // incase of exception arise, the badrequest will generate a 'Internal Server error' msg 
-                return BadRequest(Helpers.HelperMessage.serverError);
+
+                return BadRequest(HelperMessage.serverError);
             }
         }
         // post is used to add data into List/DB
         [HttpPost]
-        public IActionResult AddUser(User addUser)
+        public async Task<IActionResult> AddUser(UserDto addUser)
         {
             try
             {
                 // using UserService to add user in the Try block if no error occurs
-                var data = _user.AddUsers(addUser);
+                var data =await _user.AddUsers(addUser);
                 // if no error occurs try block will run the OK request to generate a msg 'User Added!'
-                return Ok(Helpers.HelperMessage.userAdded);
+                return Ok(HelperMessage.userAdded);
             }
             catch (Exception)
             {
                 // incase of any error occurs, the catch block runs a badrequest, which will generate a 'Internal Server Error' msg
-                return BadRequest(Helpers.HelperMessage.serverError);
+                return BadRequest(HelperMessage.serverError);
+            }
+        }
+        // post is used to add data into List/DB
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(UserDto updateUser)
+        {
+            try
+            {
+                // using UserService to add user in the Try block if no error occurs
+                var data =await _user.Update(updateUser);
+                // if no error occurs try block will run the OK request to generate a msg 'User Added!'
+                return Ok(HelperMessage.userUpdated);
+            }
+            catch (Exception)
+            {
+                // incase of any error occurs, the catch block runs a badrequest, which will generate a 'Internal Server Error' msg
+                return BadRequest(HelperMessage.serverError);
             }
         }
     }
