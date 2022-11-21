@@ -10,8 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserEntity.Services;
+using UserEntity.Services.impl;
 
-namespace RegisterLogin
+
+namespace UserEntity
 {
     public class Startup
     {
@@ -26,6 +29,14 @@ namespace RegisterLogin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // AddScoped service will be using for 'on each request new instance will be created'
+            // but in this case will not using AddScoped, because we have in memory usersList one instance we have
+            //services.AddScoped<IUsersService, UsersService>();
+
+            // Singleton sercive will be using when 'we arw working on a single instance through out of the application'
+            // example of Singleton: DB, logfile
+            services.AddSingleton<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
