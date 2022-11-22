@@ -26,7 +26,7 @@ namespace UserEntity.Controllers
         public async Task<IActionResult> Register(UserRegistrationDto request)
         {
             int objId = await _authRepo.Register(
-                new Registration { Email = request.Email }, request.Password
+                new User { Email = request.Email }, request.Password
                 );
             if (objId==0)
             {
@@ -35,7 +35,7 @@ namespace UserEntity.Controllers
             return Ok(objId, HelperMessage.userAdded);
 
         }
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserRegistrationDto login)
         {

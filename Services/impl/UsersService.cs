@@ -60,10 +60,8 @@ namespace UserEntity.Services.impl
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-
         }
         // get list of users
         public async Task<List<UserDto>> GetAll()
@@ -91,9 +89,6 @@ namespace UserEntity.Services.impl
                 throw new Exception();
             }
         }
-
-        
-
         // update the user by sending the PUT from the PSOTMAN
         public async Task<UserDto> Update(UserDto updateUser)
         {
@@ -102,7 +97,7 @@ namespace UserEntity.Services.impl
             {
                 var dbUpdate = await _db.Users.FirstOrDefaultAsync(x => x.Id == updateUser.Id && string.IsNullOrEmpty(updateUser.Email));
                 dbUpdate.UserName = updateUser.UserName;
-                dbUpdate.Password = updateUser.Password;
+                //dbUpdate.Password = updateUser.Password;
                 _db.Users.Update(dbUpdate);
                 await _db.SaveChangesAsync();
                 return _mapper.Map<UserDto>(dbUpdate);
@@ -112,14 +107,6 @@ namespace UserEntity.Services.impl
 
                 throw ex;
             }
-        }
-        public Task<int> Register(User user, string password)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<bool> UserExists(string username)
-        {
-            throw new NotImplementedException();
         }
     }
 }

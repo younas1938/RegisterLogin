@@ -9,7 +9,7 @@ namespace UserEntity.Services
     public interface IAuthRepository 
     {
 
-        Task<int> Register(Registration user, string password);
+        Task<int> Register(User user, string password);
 
         Task<string> Login(string email, string password);
         Task<bool> UserExists(string username);

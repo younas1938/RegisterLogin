@@ -29,7 +29,7 @@ namespace UserEntity.Services.impl
 
         public async Task<string> Login(string email, string password)
         {
-            Registration user = await _db.Registrations.FirstOrDefaultAsync(x => x.Email.ToLower().Equals(email.ToLower()));
+            User user = await _db.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Equals(email.ToLower()));
             if (user==null)
             {
                 return HelperMessage.notFound;
@@ -44,7 +44,7 @@ namespace UserEntity.Services.impl
             }
         }
 
-        public async Task<int> Register(Registration user, string password)
+        public async Task<int> Register(User user, string password)
         {
 
             if (await UserExists(user.Email))
@@ -57,13 +57,13 @@ namespace UserEntity.Services.impl
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            await _db.Registrations.AddAsync(user);
+            await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
             return user.Id;
         }
         public async Task<bool> UserExists(string email)
         {
-            if (await _db.Registrations.AnyAsync(x => x.Email.ToLower() == email.ToLower()))
+            if (await _db.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower()))
             {
                 return true;
             }
@@ -92,7 +92,7 @@ namespace UserEntity.Services.impl
                 return true;
             }
         }
-        private string CreateToken(Registration user)
+        private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>
             {
