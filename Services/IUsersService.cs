@@ -24,6 +24,5 @@ namespace UserEntity.Services
         // Delete user mehthod without body
         Task<List<UserDto>> Delete(int id);
 
-        /* Interface doesnt have a body { }*/
     }
 }

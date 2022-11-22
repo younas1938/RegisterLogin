@@ -15,5 +15,6 @@ namespace UserEntity.Context
         // whenever we want to see a representation of our model in the database,
         // we have to add a DBSet of that model that's how EF know what tables it should create
         public DbSet<User> Users { get; set; }
+        public DbSet<Registration> Registrations { get; set; }
     }
 }

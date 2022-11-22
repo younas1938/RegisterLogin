@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using UserEntity.Services;
 using UserEntity.Helpers;
 using UserEntity.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserEntity.Controllers
 {
+    [Authorize]
     // used to the all types and derived types serve as HTTP respnses
     [ApiController]
     // ApiController enables several featues like attribute Routing
