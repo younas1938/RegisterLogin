@@ -8,108 +8,128 @@ using UserEntity.Services;
 using UserEntity.Helpers;
 using UserEntity.Dto;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using UserEntity.Context;
+using AutoMapper;
 
 namespace UserEntity.Controllers
 {
-    [Authorize]
-    // used to the all types and derived types serve as HTTP respnses
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
-    // ApiController enables several featues like attribute Routing
-    // specific controller call when web services usings
     [Route("[controller]")]
     public class UserController : BaseController
     {
         private readonly IUsersService _user;
-        // added our Service for the User
-        public UserController(IUsersService user)
+        private readonly IAuthService _authRepo;
+        private readonly UserDbContext _context;
+        private readonly IMapper _mapper;
+        public UserController(IUsersService user, IAuthService authRepo, UserDbContext context, IMapper mapper)
         {
             _user = user;
+            _authRepo = authRepo;
+            _context = context;
+            _mapper = mapper;
         }
-        // httpGet will return, in our case we are returning the Users from the  List/db
-        [HttpGet("Users")]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet("GetAll")]
+        public IActionResult GetUsers([FromQuery] UserParameter userParameter)
         {
             try
             {
-                var users = _user.GetAll();
-                // it will call the override OK method which is in the BaseController
-                // OK will return the 200 successful http request
-                return Ok( await users);
+                var users = _user.GetAll(userParameter);
+
+
+
+                if (users == null)
+                {
+                    return BadRequest(HelperMessage.notFound);
+                }
+                return Ok(users);
             }
             catch (Exception)
             {
-                // this badrequest generatre a Server Error message 'Internal Server Error'
-                return BadRequest(HelperMessage.serverError) ;
+                return BadRequest(HelperMessage.serverError);
             }
         }
-        // HttpGet("{id}") this will route into the specific id request likes Users/2
+        [HttpGet("search")]
+        public IActionResult Search(string name)
+        {
+            try
+            {
+                var data = _user.SearchUser(name);
+                if (data != null)
+                {
+                    return Ok(data);
+                }
+                return NotFound();
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+          
+        }
         [HttpGet("{id}")]
-        public async Task<IActionResult> UserDetails(int id)
+        public IActionResult UserDetails(string id)
         {
             try
             {
-                // will get user obj by it's id with in Try block incase of error
                 var user = _user.GetById(id);
-                // Ok returns to JSON form with some generic response (status:1, message:"")
-                return Ok(await user);
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return BadRequest(HelperMessage.notFound);
+                }
             }
             catch (Exception)
             {
-                // incase of user wrong entry or any other issues badrequest will returen a generic msg Server Error
-                return BadRequest(Helpers.HelperMessage.serverError);
+                return BadRequest(HelperMessage.notFound);
             }
         }
-        
 
-        // using httpDelete request to remove user from list/db by id
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        [HttpPost("Delete")]
+        public IActionResult DeleteUser(string id)
         {
             try
             {
-                var data = await _user.Delete(id);
-                return Ok(  HelperMessage.userDeleted);
+                var data =  _user.Delete(id);
+                return Ok(data, HelperMessage.userDeleted);
 
             }
             catch (Exception)
             {
-
-                return BadRequest(HelperMessage.serverError);
+                return BadRequest(HelperMessage.notFound);
             }
         }
-        // post is used to add data into List/DB
-        [HttpPost]
-        public async Task<IActionResult> AddUser(UserDto addUser)
-        {
-            try
-            {
-                // using UserService to add user in the Try block if no error occurs
-                var data =await _user.AddUsers(addUser);
-                // if no error occurs try block will run the OK request to generate a msg 'User Added!'
-                return Ok(HelperMessage.userAdded);
-            }
-            catch (Exception)
-            {
-                // incase of any error occurs, the catch block runs a badrequest, which will generate a 'Internal Server Error' msg
-                return BadRequest(HelperMessage.serverError);
-            }
-        }
-        // post is used to add data into List/DB
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UserDto updateUser)
+        public IActionResult UpdateUser(UpdateUserDto updateUser)
         {
-            try
+
+            var userId = _user.Update(updateUser);
+            if (userId != null)
             {
-                // using UserService to add user in the Try block if no error occurs
-                var data =await _user.Update(updateUser);
-                // if no error occurs try block will run the OK request to generate a msg 'User Added!'
-                return Ok(HelperMessage.userUpdated);
+                return Ok(userId, HelperMessage.userUpdated);
             }
-            catch (Exception)
+            else
             {
-                // incase of any error occurs, the catch block runs a badrequest, which will generate a 'Internal Server Error' msg
-                return BadRequest(HelperMessage.serverError);
+                return NotFound(HelperMessage.notFound);
             }
         }
     }
 }
+
+
+//var result = (users.Select(x => _mapper.Map<GetAllUsersDto>(x))).ToList();
+//var delUser = await _userManager.FindByIdAsync(id);
+//if (delUser!=null)
+//{
+//    await _userManager.DeleteAsync(delUser);
+//    return delUser.Id;
+//}
+//else
+//{
+//    return Helpers.HelperMessage.notFound;
+//}

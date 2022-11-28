@@ -12,9 +12,11 @@ namespace UserEntity.Helpers
         public const string userDeleted = "User Deleted!";
         public const string userUpdated = "User Updated!";
         public const string serverError = "Internal Server Error!";
-        public const string userExists = "User Already Exist!";
+        public const string userExists = "User or Email Exist!";
+        public const string inCorrect = "User or Email's incorrect!";
+        public const string loggedIn = "User Login!";
         public const string notFound = "Not Found!";
-        public const string loggedIn = "User Login";
+        public const string DbEmpty = "Database is Null!";
 
     }
 }

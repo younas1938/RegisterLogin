@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,41 +12,80 @@ using UserEntity.Services;
 
 namespace UserEntity.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     [Route("[controller]")]
     public class AuthController : BaseController
     {
-        private readonly IAuthRepository _authRepo;
 
-        public AuthController(IAuthRepository authRepo)
+        private readonly IAuthService _authService;
+        private readonly IConfiguration _config;
+        public AuthController(IAuthService authService, IConfiguration config)
         {
-            _authRepo = authRepo;
+            _authService = authService;
+            _config = config;
         }
+
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegistrationDto request)
         {
-            int objId = await _authRepo.Register(
-                new User { Email = request.Email }, request.Password
-                );
-            if (objId==0)
+            try
+            {
+                var objToken = await _authService.Register(request);
+                return Ok(objToken, HelperMessage.userAdded);
+            }
+            catch (Exception)
             {
                 return BadRequest(HelperMessage.userExists);
             }
-            return Ok(objId, HelperMessage.userAdded);
-
         }
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(UserRegistrationDto login)
+        public async Task<IActionResult> Login(LoginUserDto login)
         {
-            string userAuth = await _authRepo.Login(login.Email,login.Password);
-            if (userAuth == HelperMessage.notFound)
+            
+            if (ModelState.IsValid)
             {
-                return BadRequest(HelperMessage.notFound);
+                var userAuth = await _authService.Login(login);
+                if (!string.IsNullOrEmpty(userAuth))
+                {
+                    return Ok(userAuth, HelperMessage.loggedIn);
+                }
             }
-            return Ok(userAuth, HelperMessage.loggedIn);
-
+            return BadRequest(HelperMessage.inCorrect);
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//[HttpGet("confirmEmail")]
+//public async Task<IActionResult> ConfirmEmail(string userId, string token)
+//{
+
+//    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+//    {
+//        return BadRequest(HelperMessage.notFound);
+//    }
+
+//    var result = await _authService.ConfirmEmailAsync(userId, token);
+//    if (result)
+//    {
+//        return Redirect($"{_config["appURL"]}/confirmemail.html");
+
+//    }
+//    return BadRequest("Not Confirmed");
+//}
+//int objId = await _authService.Register(new User { Email = request.Email }, request.Password);

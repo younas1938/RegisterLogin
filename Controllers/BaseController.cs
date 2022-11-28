@@ -11,11 +11,7 @@ namespace UserEntity.Controllers
     //we use baseController for common features in our application, which will be use next in anywhere we want just by call it's properties and 
     public class BaseController : Controller
     {
-        /// <summary>
-        /// Overrides Ok Response.
-        /// </summary>
-        /// <param name="value">The value object.</param>
-        /// <returns>An OkObjectResult.</returns>
+
         public override OkObjectResult Ok(object value)
         {
             
@@ -27,11 +23,7 @@ namespace UserEntity.Controllers
                 Payload = value
             });
         }
-        /// <summary>
-        /// Overrides Ok Response.
-        /// </summary>
-        /// <param name="message">The message to be returned.</param>
-        /// <returns>An OkObjectResult.</returns>
+
         protected OkObjectResult Ok(string message)
         {
             // this is for the message we want to return in the server response
@@ -42,12 +34,7 @@ namespace UserEntity.Controllers
             });
         }
 
-        /// <summary>
-        /// Overrides Ok Response.
-        /// </summary>
-        /// <param name="value">The value object.</param>
-        /// <param name="message">The message to be returned.</param>
-        /// <returns>An OkObjectResult.</returns>
+
         protected OkObjectResult Ok(object value, string message)
         {
             // this case will work if we want to show message and data 
@@ -58,11 +45,7 @@ namespace UserEntity.Controllers
                 Payload = value
             });
         }
-        /// <summary>
-        /// Overrides Bad Request.
-        /// </summary>
-        /// <param name="value">The value object.</param>
-        /// <returns>A BadRequestObjectResult.</returns>
+
         public override BadRequestObjectResult BadRequest(object value)
         {
             // if we passes the non string type like system generated exception it will go through if condition
